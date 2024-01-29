@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caller-service-deployment
+  labels:
+    app: callerservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: callerservice
+  template:
+    metadata:
+      labels:
+        app: callerservice
+    spec:
+      containers:
+      - name: caller-service-test
+        image: caller-service-test
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+          - name: COUNTER_SERVICE_URL
+            value: http://counter-service-deployment.default.svc.cluster.local:8081
+          - name: LISTEN_PORT
+            value: "8080"
